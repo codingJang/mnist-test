@@ -1,5 +1,6 @@
 import argparse
 import json
+import os
 import torch
 import torch.nn.functional as F
 from torchvision import datasets, transforms
@@ -30,6 +31,7 @@ def test(model, device, test_loader):
         "total_number_images": len(test_loader.dataset),
         "percent_correct": 100. * correct / len(test_loader.dataset)
     }
+    os.makedirs("logs", exist_ok=True)
     with open("logs/test_result.json", "w") as json_file:
         json.dump(test_result, json_file, indent=4)
 
@@ -71,7 +73,7 @@ def main():
         transforms.ToTensor(),
         transforms.Normalize((0.1307,), (0.3081,))
         ])
-    test_dataset = datasets.MNIST('./corrupt_data', train=False,
+    test_dataset = datasets.MNIST('./data', train=False,
                        transform=transform)
     test_loader = torch.utils.data.DataLoader(test_dataset, **test_kwargs)
 
